@@ -1,0 +1,4 @@
+hb_swagger_ui:
+  directory: "http://activity.test:80"
+  files:
+    - "/doc/openapi.json"

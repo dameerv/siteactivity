@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Url</th>
+        <th scope="col">Количество визитов</th>
+        <th scope="col">Последнее посещение</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for count, activity in pagination.items %}
+        {% if activity %}
+        <tr>
+            <th scope="row">{{ count + 1 }}</th>
+            <td>{{ activity.url }}</td>
+            <td>{{ activity.numberOfVisits }}</td>
+            <td>{{ activity.getLastVisitFormat }}</td>
+
+        </tr>
+        {% endif %}
+    {% endfor %}
+    </tbody>
+</table>
