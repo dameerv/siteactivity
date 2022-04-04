@@ -37,6 +37,7 @@ class ActivityService
             'itemsPerPage' => $this->itemsPerPage
         ]);
         $entities = [];
+
         if ($response->getStatusCode() === 200) {
             $activities = json_decode($response->getContent())[0]->result;
 

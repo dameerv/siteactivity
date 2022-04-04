@@ -16,14 +16,11 @@ class ActivityHttpClient
     {
     }
 
+    /**
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
     public function send(string $method, array $data): ResponseInterface
     {
-        $responcse = $this->client->request(
-                  'GET',
-                    $this->activationHost
-                );
-
-        dd($responcse->getStatusCode());
         return $this->client->request(
             'POST',
             $this->activationHost . $this->activationUrl,
@@ -48,12 +45,19 @@ class ActivityHttpClient
     {
         return $this->client->request(
             'POST',
-            $this->activationHost . "/register-user",
+            $this->activationHost . $this->activationUrl,
             [
                 'headers' => [
                     'X-AUTH-TOKEN' => $this->activationApiToken,
                     'Content-Type' => 'application/json'
                 ],
+                'body' => json_encode([
+                    [
+                        "jsonrpc" => "2.0",
+                        "method" => 'ping',
+                        "params" => [],
+                        'id' => 1
+                    ]])
             ]
         );
     }

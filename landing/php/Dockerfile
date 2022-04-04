@@ -16,9 +16,10 @@ RUN apt-get update \
     && pecl install amqp \
     && docker-php-ext-enable amqp
 
-RUN apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev
+RUN apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev wget
 
-WORKDIR /var/www/symfony_docker
+WORKDIR /var/www/landing/
+COPY . /var/www/landing/
 
 RUN service supervisor restart
 
@@ -26,8 +27,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
-RUN git config --global user.email "d2450170@yandex.ru" \
-    && git config --global user.name "Damir Vakhitov"
 
 RUN curl https://deb.nodesource.com/setup_12.x | bash
 RUN curl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -

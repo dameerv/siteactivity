@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  db_activity:
+    container_name: db_activ
+    image: mariadb
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: symfony_docker
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    ports:
+      - '4307:3306'
+    volumes:
+      - ./activity/mysql:/var/lib/mysql
+    networks:
+      - activity
+
+  activity:
+    container_name: activity
+    build:
+      context: ./activity/php
+    ports:
+      - '9001:9000'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./activity/app:/var/www/activity
+    depends_on:
+      - db_activity
+    networks:
+      - activity
+      - web
+
+  landing:
+    container_name: landing
+    build:
+      context: ./landing/php
+    ports:
+      - '9000:9000'
+    volumes:
+      - ./landing/app:/var/www/landing
+    networks:
+      - landing
+      - web
+
+  nginx:
+    container_name: nginx
+    image: nginx:stable-alpine
+    ports:
+      - '80:80'
+    volumes:
+      - ./landing/app:/var/www/landing
+      - ./landing/nginx/default.conf:/etc/nginx/conf.d/landing.conf
+      - ./activity/app:/var/www/activity
+      - ./activity/nginx/default.conf:/etc/nginx/conf.d/activity.conf
+    depends_on:
+      - landing
+      - activity
+    networks:
+      - web
+
+  rabbitmq3:
+    container_name: "rabbitmq_evolta"
+    image: rabbitmq:3.8-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=myuser
+      - RABBITMQ_DEFAULT_PASS=mypassword
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+    networks:
+      - activity
+      - landing
+      - web
+
+networks:
+  activity:
+  landing:
+  web:
+

@@ -8,8 +8,16 @@ RUN apt update \
     && docker-php-ext-configure zip \
     && docker-php-ext-install zip
 
-RUN apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev
+RUN apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev wget
 
-WORKDIR /var/www/symfony_docker
+RUN rm -rf /var/www && mkdir -p /var/www/activity
+WORKDIR /var/www/activity/
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY . /var/www/activity/
+
+
+RUN wget https://getcomposer.org/download/2.3.3/composer.phar \
+    && mv composer.phar /usr/bin/composer && chmod +x /usr/bin/composer
+
+#RUN composer install
+
