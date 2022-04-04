@@ -4,7 +4,7 @@ EXEC=docker exec -it
 DOCKER_EXEC_ACTIVITY = $(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY)
 DOCKER_EXEC_LADING = $(EXEC) $(DOCKER_CONTAINER_PHP_LANDING)
 
-build: docker-up bootstrap
+build: docker-build bootstrap
 up: docker-up
 stop: docker-down
 restart: stop up
@@ -23,10 +23,12 @@ bootstrap:
 	$(DOCKER_EXEC_ACTIVITY) bin/console c:c
 	$(DOCKER_EXEC_LADING) bin/console c:c
 
-	$(DOCKER_EXEC_LADING) yarn install
+	$(DOCKER_EXEC_LADING) yarn install5
 	$(DOCKER_EXEC_LADING) yarn build
 
 docker-restart: docker-down docker-up
+docker-build:
+	docker-compose up -d --build
 
 docker-up:
 	docker-compose up -d
