@@ -22,16 +22,15 @@ services:
     build:
       context: ./activity/php
     ports:
-      - '9001:9000'
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - '9001:9001'
     volumes:
       - ./activity/app:/var/www/activity
     depends_on:
       - db_activity
     networks:
-      - activity
-      - web
+      activity:
+      web:
+        ipv4_address: 192.168.240.5
 
   landing:
     container_name: landing
@@ -42,8 +41,9 @@ services:
     volumes:
       - ./landing/app:/var/www/landing
     networks:
-      - landing
-      - web
+      landing:
+      web:
+        ipv4_address: 192.168.240.3
 
   nginx:
     container_name: nginx
@@ -59,7 +59,8 @@ services:
       - landing
       - activity
     networks:
-      - web
+      web:
+        ipv4_address: 192.168.240.4
 
   rabbitmq3:
     container_name: "rabbitmq_evolta"
@@ -81,4 +82,8 @@ networks:
   activity:
   landing:
   web:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.240.0/24
 
