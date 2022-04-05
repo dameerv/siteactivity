@@ -74,9 +74,8 @@ services:
       # HTTP management UI
       - '15672:15672'
     networks:
-      - activity
-      - landing
-      - web
+      web:
+        ipv4_address: 192.168.240.6
 
 networks:
   activity:

@@ -11,7 +11,6 @@ class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
     public function index(ActivityService $service): Response    {
-        dd($service->getPagination());
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
         ]);

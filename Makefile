@@ -1,8 +1,7 @@
 DOCKER_CONTAINER_PHP_ACTIVITY = activity
 DOCKER_CONTAINER_PHP_LANDING = landing
-EXEC=docker exec -it
-DOCKER_EXEC_ACTIVITY = $(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY)
-DOCKER_EXEC_LADING = $(EXEC) $(DOCKER_CONTAINER_PHP_LANDING)
+EXEC=docker exec
+
 
 build: docker-build bootstrap
 up: docker-up
@@ -11,20 +10,22 @@ restart: stop up
 start-dev: start docker-logs
 
 enter-land:
-	$(DOCKER_EXEC_LANDING) /bin/sh
+	$(EXEC) -it $(DOCKER_CONTAINER_PHP_LANDING) /bin/sh
 
 enter-act:
-	$(DOCKER_EXEC_ACTIVITY) /bin/bash
+	$(EXEC) -it $(DOCKER_CONTAINER_PHP_ACTIVITY) /bin/bash
 
 bootstrap:
-	$(DOCKER_EXEC_ACTIVITY) composer install
-	$(DOCKER_EXEC_LADING) composer install
+	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) composer install
+	$(EXEC) $(DOCKER_CONTAINER_PHP_LANDING) composer install
 
-	$(DOCKER_EXEC_ACTIVITY) bin/console c:c
-	$(DOCKER_EXEC_LADING) bin/console c:c
+	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) bin/console c:c
+	$(EXEC) $(DOCKER_CONTAINER_PHP_LANDING) bin/console c:c
 
-	$(DOCKER_EXEC_LADING) yarn install5
-	$(DOCKER_EXEC_LADING) yarn build
+	$(EXEC) $(DOCKER_CONTAINER_PHP_LANDING) yarn install
+	$(EXEC) $(DOCKER_CONTAINER_PHP_LANDING) yarn build
+
+	$(EXEC) -d $(DOCKER_CONTAINER_PHP_LANDING) bin/console messenger:consume amqp_activity_register
 
 docker-restart: docker-down docker-up
 docker-build:
@@ -32,6 +33,7 @@ docker-build:
 
 docker-up:
 	docker-compose up -d
+	$(EXEC) -d $(DOCKER_CONTAINER_PHP_LANDING) bin/console messenger:consume amqp_activity_register
 
 docker-down:
 	docker-compose down --remove-orphans
@@ -46,7 +48,7 @@ docker-logs:
 composer-install: activity-composer-install landing-composer-install
 
 activity-composer-install:
-	$(DOCKER_EXEC_ACTIVITY) composer install --optimize-autoloader
+	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) composer install --optimize-autoloader
 
 landing-composer-install:
 	$(DOCKER_EXEC_LANDING)  composer install --optimize-autoloader
@@ -64,7 +66,10 @@ cache: cc
 
 cc:
 	$(DOCKER_EXEC_LANDING) bin/console c:c
-	$(DOCKER_EXEC_ACTIVITY) bin/console c:c
+	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) bin/console c:c
 
 migration:
-	$(DOCKER_EXEC_ACTIVITY) bin/console doctrine:migrations:migrate
+	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) bin/console doctrine:migrations:migrate
+
+consume:
+	$(EXEC) $(DOCKER_CONTAINER_PHP_LANDING) bin/console messenger:consume amqp_activity_register -vv

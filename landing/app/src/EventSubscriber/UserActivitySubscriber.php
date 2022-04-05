@@ -47,7 +47,7 @@ class UserActivitySubscriber implements EventSubscriberInterface
     private function isUrlNotExcluded(ServerBag $server)
     {
         foreach ($this->notRegisteredUrls as $url) {
-            if (preg_match("|^{$url}|", $server->get('PATH_INFO'))) {
+            if (preg_match("|^{$url}|", $server->get('REQUEST_URI'))) {
                 return false;
             }
         }
@@ -62,6 +62,6 @@ class UserActivitySubscriber implements EventSubscriberInterface
     private function retrieveUrl(ServerBag $server): string
     {
         $protocol = ($server->get('HTTPS') === 'on') ? 'https' : 'http';
-        return $protocol . '://' . $server->get('HTTP_HOST') . $server->get('PATH_INFO');
+        return $protocol . '://' . $server->get('HTTP_HOST') . $server->get('REQUEST_URI');
     }
 }
