@@ -14,14 +14,6 @@ use Exception;
 
 class TestController extends AbstractController
 {
-    /**
-     * Контроллер для создания тестового пользователя. В body добавить ключи email и  password.  Изменения, валидация
-     * поьзователя и токена, а так же использование в продакшене контроллера не предусмотерно  так как проект
-     * выполняется в  рамках тестового задания. Парль так же не хешируется по причине тествоого характера
-     * проекта.
-     *
-     * @throws Exception
-     */
     #[Route('/', name: 'home', methods:['GET'])]
     public function index(Request $request, ActivityRepository $activityRepository): Response
     {
