@@ -2,7 +2,6 @@ DOCKER_CONTAINER_PHP_ACTIVITY = activity
 DOCKER_CONTAINER_PHP_LANDING = landing
 EXEC=docker exec
 
-
 build: docker-build bootstrap
 up: docker-up
 stop: docker-down
@@ -44,7 +43,6 @@ ps:
 docker-logs:
 	docker-compose logs -t -f --tail="all"
 
-
 composer-install: activity-composer-install landing-composer-install
 
 activity-composer-install:
@@ -61,7 +59,6 @@ activity-composer-update:
 landing-composer-update:
 	$(DOCKER_EXEC_LANDING)  composer  update --optimize-autoloader
 
-
 cache: cc
 
 cc:
@@ -73,3 +70,4 @@ migrate:
 
 consume:
 	$(EXEC) $(DOCKER_CONTAINER_PHP_LANDING) bin/console messenger:consume amqp_activity_register -vv
+
