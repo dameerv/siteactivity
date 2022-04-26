@@ -40,26 +40,4 @@ class ActivityHttpClient
         );
     }
 
-
-    public function testRequest()
-    {
-        return $this->client->request(
-            'POST',
-            $this->activationHost . $this->activationUrl,
-            [
-                'headers' => [
-                    'X-AUTH-TOKEN' => $this->activationApiToken,
-                    'Content-Type' => 'application/json'
-                ],
-                'body' => json_encode([
-                    [
-                        "jsonrpc" => "2.0",
-                        "method" => 'ping',
-                        "params" => [],
-                        'id' => 1
-                    ]])
-            ]
-        );
-    }
-
 }
