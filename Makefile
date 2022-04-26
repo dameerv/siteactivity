@@ -68,7 +68,7 @@ cc:
 	$(DOCKER_EXEC_LANDING) bin/console c:c
 	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) bin/console c:c
 
-migration:
+migrate:
 	$(EXEC) $(DOCKER_CONTAINER_PHP_ACTIVITY) bin/console doctrine:migrations:migrate
 
 consume:

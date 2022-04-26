@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db_activity:
-    container_name: db_activ
+    container_name: db_activity
     image: mariadb
     command: --default-authentication-plugin=mysql_native_password
     environment:
