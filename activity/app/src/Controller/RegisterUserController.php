@@ -30,7 +30,7 @@ class RegisterUserController extends AbstractController
             $password = $request->request->get('password');
             $apiToken = TokenGenerator::generate();
 
-            if(!$email && !$password){
+            if(!$email || !$password){
                 throw new Exception('Поля  "email" и "password" обязательны');
             }
 
