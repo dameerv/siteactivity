@@ -24,6 +24,5 @@ class ActivityRegisterHandler implements MessageHandlerInterface
             'url' => $message->getUrl(),
             'visitedAt' => $message->getVisitedAt()->format(Activity::ACTIVITY_LAST_VISIT_FORMAT)
         ]);
-//dd($response->getContent());
     }
 }
