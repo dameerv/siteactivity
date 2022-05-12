@@ -17,6 +17,7 @@ class ActivityHttpClient
     }
 
     /**
+       Methos sends json-rpc requst to the activity service.
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function send(string $method, array $data): ResponseInterface
