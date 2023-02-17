@@ -26,25 +26,23 @@ class RegisterActivityMethod implements JsonRpcMethodInterface, MethodWithValida
 
     public function apply(array $paramList = null)
     {
-        $activity = new Activity();
-        $activity
-            ->setUrl($paramList['url'])
-            ->setVisitedAt(DateTimeImmutable::createFromFormat(self::DATE_TIME_FORMAT, $paramList['visitedAt']));
-
         try {
+            $activity = new Activity();
+            $activity
+                ->setUrl($paramList['url'])
+                ->setVisitedAt(DateTimeImmutable::createFromFormat(self::DATE_TIME_FORMAT, $paramList['visitedAt']));
             $this->entityManager->persist($activity);
             $this->entityManager->flush();
         } catch (Exception $exception) {
             return [
-                'success' => true,
+                'success' => false,
                 'message' => $exception->getMessage()
             ];
-
         }
 
         return [
             'success' => true,
-            'message' => "Посещение зафиксировано"
+            'message' => 'Посещение зафиксировано'
         ];
     }
 

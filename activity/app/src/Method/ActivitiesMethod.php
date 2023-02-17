@@ -15,7 +15,7 @@ class ActivitiesMethod implements JsonRpcMethodInterface
     {
     }
 
-    public function apply(array $paramList = null)
+    public function apply(array $paramList = null): array
     {
         $pagination = $this->repository->getAllUrlsWithLastVisitPagination($paramList['page'], $paramList['itemsPerPage']);
 

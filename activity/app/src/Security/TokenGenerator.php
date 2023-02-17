@@ -7,11 +7,6 @@ use Exception;
 class TokenGenerator
 {
     /**
-     * Generate hashed token
-     *
-     * @param int|null $length
-     *
-     * @return string
      * @throws Exception
      */
     public static function generate(int $length = null): string
